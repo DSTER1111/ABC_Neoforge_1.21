@@ -39,7 +39,7 @@ public class BCItems {
     public static final DeferredItem<BlockItem> RS_LATCH_ITEM = blockItem("rs_latch", BCBlocks.RS_LATCH);
     public static final DeferredItem<BlockItem> TIMER_ITEM = blockItem("timer", BCBlocks.TIMER);
     public static final DeferredItem<BlockItem> RAIN_DETECTOR_ITEM = blockItem("rain_detector", BCBlocks.RAIN_DETECTOR);
-    public static final DeferredItem<BlockItem> HEAT_SENSOR_ITEM = blockItem("heat_sensor", BCBlocks.HEAT_SENSOR);
+    public static final DeferredItem<BlockItem> HEAT_DETECTOR_ITEM = blockItem("heat_detector", BCBlocks.HEAT_DETECTOR);
     public static final DeferredItem<BlockItem> CAPACITOR_ITEM = blockItem("capacitor", BCBlocks.CAPACITOR);
     public static final DeferredItem<BlockItem> RANDOMIZER_ITEM = blockItem("randomizer", BCBlocks.RANDOMIZER);
 
@@ -74,6 +74,10 @@ public class BCItems {
             () -> new RedstoneCableBlockItem(new Item.Properties(), null, true));
 
     public static final DeferredItem<BlockItem> COMPARATOR_RAIL_ITEM = blockItem("comparator_rail", BCBlocks.COMPARATOR_RAIL);
+
+    public static final DeferredItem<BlockItem> GOLD_BUTTON_ITEM = blockItem("gold_button", BCBlocks.GOLD_BUTTON);
+
+    public static final DeferredItem<BlockItem> IRON_BUTTON_ITEM = blockItem("iron_button", BCBlocks.IRON_BUTTON);
 
     public static final DeferredItem<BlockItem> FILTERED_HOPPER_ITEM = blockItem("filtered_hopper", BCBlocks.FILTERED_HOPPER);
 

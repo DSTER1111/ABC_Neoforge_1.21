@@ -32,9 +32,9 @@ public class BCBlockEntityTypes {
             BLOCK_ENTITY_TYPES.register("rain_detector", () -> BlockEntityType.Builder.of(
                     RainDetectorBlockEntity::new, BCBlocks.RAIN_DETECTOR.get()).build(null));
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HeatSensorBlockEntity>> HEAT_SENSOR =
-            BLOCK_ENTITY_TYPES.register("heat_sensor", () -> BlockEntityType.Builder.of(
-                    HeatSensorBlockEntity::new, BCBlocks.HEAT_SENSOR.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HeatDetectorBlockEntity>> HEAT_DETECTOR =
+            BLOCK_ENTITY_TYPES.register("heat_detector", () -> BlockEntityType.Builder.of(
+                    HeatDetectorBlockEntity::new, BCBlocks.HEAT_DETECTOR.get()).build(null));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlowerBlockEntity>> BLOWER =
             BLOCK_ENTITY_TYPES.register("blower", () -> BlockEntityType.Builder.of(

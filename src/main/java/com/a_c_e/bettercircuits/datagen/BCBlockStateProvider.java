@@ -9,7 +9,7 @@ import com.a_c_e.bettercircuits.block.ComparatorRailBlock;
 import com.a_c_e.bettercircuits.block.InverterBlock;
 import com.a_c_e.bettercircuits.block.RSLatchBlock;
 import com.a_c_e.bettercircuits.block.RainDetectorBlock;
-import com.a_c_e.bettercircuits.block.HeatSensorBlock;
+import com.a_c_e.bettercircuits.block.HeatDetectorBlock;
 import com.a_c_e.bettercircuits.block.RandomizerBlock;
 import com.a_c_e.bettercircuits.block.RedstoneThresholdBlock;
 import com.a_c_e.bettercircuits.block.TimerBlock;
@@ -32,6 +32,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.HopperBlock;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -80,7 +81,7 @@ public class BCBlockStateProvider extends BlockStateProvider {
         rsLatch();
         timer();
         rainDetector();
-        heatSensor();
+        heatDetector();
         capacitor();
         randomizer();
         lightweightInverter();
@@ -101,6 +102,8 @@ public class BCBlockStateProvider extends BlockStateProvider {
         aluminumFrameItem();
 
         comparatorRail();
+        goldButton();
+        ironButton();
         filteredHopper();
         blower();
         vacuum();
@@ -231,6 +234,23 @@ public class BCBlockStateProvider extends BlockStateProvider {
 
         itemModels().withExistingParent("comparator_rail", ResourceLocation.fromNamespaceAndPath("minecraft", "item/generated"))
                 .texture("layer0", offTexture);
+    }
+
+    //Plain vanilla button model/blockstate, matching Blocks.STONE_BUTTON/OAK_BUTTON's own datagen exactly (see
+    //buttonBlock/buttonInventory, inherited from NeoForge's own BlockStateProvider) - reuses vanilla's own gold
+    //block texture, the same way vanilla's own buttons reuse their source material's block texture (stone
+    //button -> stone texture, oak button -> oak planks texture).
+    private void goldButton() {
+        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath("minecraft", "block/gold_block");
+        buttonBlock((ButtonBlock) BCBlocks.GOLD_BUTTON.get(), texture);
+        itemModels().buttonInventory("gold_button", texture);
+    }
+
+    //Same idea as goldButton() above, just reusing vanilla's own iron block texture instead.
+    private void ironButton() {
+        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath("minecraft", "block/iron_block");
+        buttonBlock((ButtonBlock) BCBlocks.IRON_BUTTON.get(), texture);
+        itemModels().buttonInventory("iron_button", texture);
     }
 
     //Filtered Hopper (see FilteredHopperBlock) - looks exactly like a regular hopper (the frame+item are drawn
@@ -827,29 +847,22 @@ public class BCBlockStateProvider extends BlockStateProvider {
         itemModels().withExistingParent("rain_detector", ResourceLocation.fromNamespaceAndPath(BetterCircuits.MOD_ID, "block/rain_detector"));
     }
 
-    private void heatSensor() {
-        Block heatSensor = BCBlocks.HEAT_SENSOR.get();
+    private void heatDetector() {
+        Block heatDetector = BCBlocks.HEAT_DETECTOR.get();
+        ResourceLocation template = ResourceLocation.fromNamespaceAndPath("minecraft", "block/template_daylight_detector");
+        ResourceLocation side = ResourceLocation.fromNamespaceAndPath("minecraft", "block/daylight_detector_side");
+        ResourceLocation top = ResourceLocation.fromNamespaceAndPath(BetterCircuits.MOD_ID, "block/heat_detector");
+        ResourceLocation topInverted = ResourceLocation.fromNamespaceAndPath(BetterCircuits.MOD_ID, "block/heat_detector_inverted");
 
-        BlockModelBuilder off = models().cubeAll("heat_sensor",
-                ResourceLocation.fromNamespaceAndPath(BetterCircuits.MOD_ID, "block/heat_sensor"));
-        BlockModelBuilder low = models().cubeAll("heat_sensor_5",
-                ResourceLocation.fromNamespaceAndPath(BetterCircuits.MOD_ID, "block/heat_sensor_5"));
-        BlockModelBuilder medium = models().cubeAll("heat_sensor_10",
-                ResourceLocation.fromNamespaceAndPath(BetterCircuits.MOD_ID, "block/heat_sensor_10"));
-        BlockModelBuilder high = models().cubeAll("heat_sensor_15",
-                ResourceLocation.fromNamespaceAndPath(BetterCircuits.MOD_ID, "block/heat_sensor_15"));
+        BlockModelBuilder normal = models().withExistingParent("heat_detector", template)
+                .texture("top", top).texture("side", side);
+        BlockModelBuilder inverted = models().withExistingParent("heat_detector_inverted", template)
+                .texture("top", topInverted).texture("side", side);
 
-        getVariantBuilder(heatSensor).forAllStates(state -> {
-            BlockModelBuilder model = switch (state.getValue(HeatSensorBlock.POWER)) {
-                case 15 -> high;
-                case 10 -> medium;
-                case 5 -> low;
-                default -> off;
-            };
-            return ConfiguredModel.builder().modelFile(model).build();
-        });
+        getVariantBuilder(heatDetector).forAllStates(state ->
+                ConfiguredModel.builder().modelFile(state.getValue(HeatDetectorBlock.INVERTED) ? inverted : normal).build());
 
-        itemModels().withExistingParent("heat_sensor", ResourceLocation.fromNamespaceAndPath(BetterCircuits.MOD_ID, "block/heat_sensor"));
+        itemModels().withExistingParent("heat_detector", ResourceLocation.fromNamespaceAndPath(BetterCircuits.MOD_ID, "block/heat_detector"));
     }
 
     private void capacitor() {

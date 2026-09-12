@@ -60,7 +60,7 @@ public class BCBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(BCBlocks.RS_LATCH.get());
         dropSelf(BCBlocks.TIMER.get());
         dropSelf(BCBlocks.RAIN_DETECTOR.get());
-        dropSelf(BCBlocks.HEAT_SENSOR.get());
+        dropSelf(BCBlocks.HEAT_DETECTOR.get());
         dropSelf(BCBlocks.CAPACITOR.get());
         dropSelf(BCBlocks.RANDOMIZER.get());
         dropSelf(BCBlocks.LIGHTWEIGHT_INVERTER.get());
@@ -82,6 +82,8 @@ public class BCBlockLootTableProvider extends BlockLootSubProvider {
 
         //Drops itself regardless of shape/signal state, matching every vanilla rail
         dropSelf(BCBlocks.COMPARATOR_RAIL.get());
+        dropSelf(BCBlocks.GOLD_BUTTON.get());
+        dropSelf(BCBlocks.IRON_BUTTON.get());
 
         //Drops only the hopper itself - the framed filter item is a separate drop, handled directly in
         //FilteredHopperBlock's own onRemove override (matching how breaking a real ItemFrame always ejects its

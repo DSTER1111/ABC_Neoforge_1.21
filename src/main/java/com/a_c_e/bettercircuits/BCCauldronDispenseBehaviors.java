@@ -14,7 +14,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.AbstractCauldronBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
@@ -26,8 +25,9 @@ import net.minecraft.world.level.gameevent.GameEvent;
 //player.setItemInHand/awardStat unconditionally, so they'd NPE if handed a null player the way e.g.
 //BucketItem.emptyContents tolerates). None of the existing bucket/bottle/potion dispense behaviors check for
 //cauldrons either - AbstractCauldronBlock implements neither LiquidBlockContainer nor BucketPickup - so this
-//re-implements the specific interactions CauldronInteraction defines for water/lava/powder snow buckets, the
-//empty bucket, glass bottles, and water potions, translated from Player+InteractionHand into BlockSource+ItemStack.
+//implements the same water/lava/powder snow bucket, empty bucket, glass bottle, and water potion interactions
+//a player has, translated from Player+InteractionHand into BlockSource+ItemStack - except for bucket-filling,
+//which is deliberately MORE restrictive than vanilla's own CauldronInteraction (see registerBucketFill).
 //
 //Every behavior here WRAPS (never replaces) whatever vanilla already had registered for that item, falling back
 //to it whenever the block in front isn't a relevant cauldron state - this preserves vanilla's own dispenser
@@ -38,8 +38,10 @@ public class BCCauldronDispenseBehaviors {
     }
 
     public static void register() {
-        //Mirrors CauldronInteraction.FILL_WATER/FILL_LAVA/FILL_POWDER_SNOW - unconditionally overwrites whatever
-        //cauldron is there (even a different liquid) with a full one of this type
+        //Deliberately NOT a mirror of CauldronInteraction.FILL_WATER/FILL_LAVA/FILL_POWDER_SNOW, which let a
+        //bucket overwrite a cauldron regardless of its current contents (even a different liquid, or the same
+        //liquid already full) - per the source mod's own spec, a dispenser should only ever be able to fill a
+        //genuinely empty cauldron; a non-empty one can only be emptied, via an empty bucket (registerBucketEmpty).
         registerBucketFill(Items.WATER_BUCKET, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3), SoundEvents.BUCKET_EMPTY);
         registerBucketFill(Items.LAVA_BUCKET, Blocks.LAVA_CAULDRON.defaultBlockState(), SoundEvents.BUCKET_EMPTY_LAVA);
         registerBucketFill(Items.POWDER_SNOW_BUCKET, Blocks.POWDER_SNOW_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3), SoundEvents.BUCKET_EMPTY_POWDER_SNOW);
@@ -56,7 +58,7 @@ public class BCCauldronDispenseBehaviors {
             protected ItemStack execute(BlockSource source, ItemStack stack) {
                 Level level = source.level();
                 BlockPos pos = source.pos().relative(source.state().getValue(DispenserBlock.FACING));
-                if (level.getBlockState(pos).getBlock() instanceof AbstractCauldronBlock) {
+                if (level.getBlockState(pos).is(Blocks.CAULDRON)) {
                     level.setBlockAndUpdate(pos, fillState);
                     level.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F, 1.0F);
                     level.gameEvent(null, GameEvent.FLUID_PLACE, pos);

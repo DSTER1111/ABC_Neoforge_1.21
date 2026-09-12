@@ -64,7 +64,7 @@ public class BCCreativeModeTabs {
 
                         //Sensors
                         output.accept(BCItems.RAIN_DETECTOR_ITEM);
-                        output.accept(BCItems.HEAT_SENSOR_ITEM);
+                        output.accept(BCItems.HEAT_DETECTOR_ITEM);
 
                         //Redstone Cable / Insulated / Bundled
                         output.accept(BCItems.REDSTONE_CABLE_ITEM);
@@ -76,6 +76,12 @@ public class BCCreativeModeTabs {
 
                         //Comparator Rail
                         output.accept(BCItems.COMPARATOR_RAIL_ITEM);
+
+                        //Gold Button
+                        output.accept(BCItems.GOLD_BUTTON_ITEM);
+
+                        //Iron Button
+                        output.accept(BCItems.IRON_BUTTON_ITEM);
 
                         //Filtered Hopper family
                         output.accept(BCItems.FILTERED_HOPPER_ITEM);

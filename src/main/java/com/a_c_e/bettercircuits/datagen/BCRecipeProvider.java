@@ -257,14 +257,16 @@ public class BCRecipeProvider extends RecipeProvider implements IConditionBuilde
                 .unlockedBy("has_slime_ball", has(Items.SLIME_BALL))
                 .save(recipeOutput);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, BCItems.HEAT_SENSOR_ITEM.get())
-                .pattern("DSD")
-                .pattern("SWS")
-                .pattern("DSD")
-                .define('D', Items.REDSTONE)
-                .define('S', Items.STONE)
-                .define('W', Items.WATER_BUCKET)
-                .unlockedBy("has_redstone", has(Items.REDSTONE))
+        //Same shape as Rain Detector's own recipe (glass/slime ball/wooden slabs), just with a snowball instead
+        //of the slime ball - matching Heat Detector's own "hot/cold" theming.
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, BCItems.HEAT_DETECTOR_ITEM.get())
+                .pattern("GGG")
+                .pattern("SSS")
+                .pattern("WWW")
+                .define('G', Items.GLASS)
+                .define('S', Items.SNOWBALL)
+                .define('W', ItemTags.WOODEN_SLABS)
+                .unlockedBy("has_snowball", has(Items.SNOWBALL))
                 .save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, BCItems.CAPACITOR_ITEM.get())
@@ -306,6 +308,22 @@ public class BCRecipeProvider extends RecipeProvider implements IConditionBuilde
                 .define('I', Items.IRON_INGOT)
                 .define('C', Items.COMPARATOR)
                 .unlockedBy("has_comparator", has(Items.COMPARATOR))
+                .save(recipeOutput);
+
+        //A 2x2 of nuggets rather than vanilla's own 1-ingredient-in, 1-button-out shape (stone -> stone button,
+        //planks -> wood button) - per the source mod's own spec, a cheaper nugget-based recipe for these two.
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, BCItems.GOLD_BUTTON_ITEM.get())
+                .pattern("NN")
+                .pattern("NN")
+                .define('N', Items.GOLD_NUGGET)
+                .unlockedBy("has_gold_nugget", has(Items.GOLD_NUGGET))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, BCItems.IRON_BUTTON_ITEM.get())
+                .pattern("NN")
+                .pattern("NN")
+                .define('N', Items.IRON_NUGGET)
+                .unlockedBy("has_iron_nugget", has(Items.IRON_NUGGET))
                 .save(recipeOutput);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, BCItems.FILTERED_HOPPER_ITEM.get())

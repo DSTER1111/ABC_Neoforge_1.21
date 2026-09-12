@@ -16,6 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.ChainBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.IronBarsBlock;
@@ -175,8 +176,8 @@ public class BCBlocks {
             () -> new RainDetectorBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(0.2f).sound(SoundType.WOOD).ignitedByLava()));
 
-    public static final DeferredBlock<HeatSensorBlock> HEAT_SENSOR = BLOCKS.register("heat_sensor",
-            () -> new HeatSensorBlock(BlockBehaviour.Properties.of()
+    public static final DeferredBlock<HeatDetectorBlock> HEAT_DETECTOR = BLOCKS.register("heat_detector",
+            () -> new HeatDetectorBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(0.2f).sound(SoundType.WOOD).ignitedByLava()));
 
     //---- Redstone Cable / Insulated / Bundled ----
@@ -188,6 +189,24 @@ public class BCBlocks {
     public static final DeferredBlock<ComparatorRailBlock> COMPARATOR_RAIL = BLOCKS.register("comparator_rail",
             () -> new ComparatorRailBlock(BlockBehaviour.Properties.of()
                     .noCollission().strength(0.7f).sound(SoundType.METAL)));
+
+    //---- Gold Button ----
+    //Plain vanilla ButtonBlock, same properties as Blocks.STONE_BUTTON/OAK_BUTTON's own registration, just with
+    //BlockSetType.GOLD (a real vanilla BlockSetType - currently only used for the gold weighted pressure plate
+    //- reused here rather than defining a new one) and a GOLD_BUTTON_TICKS_TO_STAY_PRESSED pulse shorter than
+    //either vanilla button (wood 30 ticks, stone 20 ticks - see Blocks.java's own button registrations).
+    public static final int GOLD_BUTTON_TICKS_TO_STAY_PRESSED = 10;
+    public static final DeferredBlock<ButtonBlock> GOLD_BUTTON = BLOCKS.register("gold_button",
+            () -> new ButtonBlock(BlockSetType.GOLD, GOLD_BUTTON_TICKS_TO_STAY_PRESSED, BlockBehaviour.Properties.of()
+                    .noCollission().strength(0.5f).pushReaction(PushReaction.DESTROY)));
+
+    //---- Iron Button ----
+    //Same idea as Gold Button, but BlockSetType.IRON (also a real vanilla BlockSetType, currently only used for
+    //the iron door/trapdoor) and a pulse LONGER than either vanilla button instead of shorter.
+    public static final int IRON_BUTTON_TICKS_TO_STAY_PRESSED = 40;
+    public static final DeferredBlock<ButtonBlock> IRON_BUTTON = BLOCKS.register("iron_button",
+            () -> new ButtonBlock(BlockSetType.IRON, IRON_BUTTON_TICKS_TO_STAY_PRESSED, BlockBehaviour.Properties.of()
+                    .noCollission().strength(0.5f).pushReaction(PushReaction.DESTROY)));
 
     //---- Filtered Hopper ----
     public static final DeferredBlock<FilteredHopperBlock> FILTERED_HOPPER = BLOCKS.register("filtered_hopper",

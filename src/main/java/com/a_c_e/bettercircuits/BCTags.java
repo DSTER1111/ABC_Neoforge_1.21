@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Block;
 //for where each one's actual contents get written).
 public class BCTags {
     public static final TagKey<Block> HOT_BLOCK = blockTag("hot_block");
+    public static final TagKey<Block> COLD_BLOCK = blockTag("cold_block");
 
     private static TagKey<Block> blockTag(String path) {
         return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(BetterCircuits.MOD_ID, path));

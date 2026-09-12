@@ -87,11 +87,16 @@ public class BCBlockTagProvider extends BlockTagsProvider {
         //behaves like a rail at all (no snapping to neighbors, minecarts couldn't be placed on or ride across it).
         tag(BlockTags.RAILS).add(BCBlocks.COMPARATOR_RAIL.get());
 
-        //Heat Sensor's own candidate list (see HeatSensorBlock) - light sources that are "contained" (lanterns,
-        //redstone lamp, glowstone, jack o'lantern, candles, etc.) are deliberately excluded, matching the source
-        //mod's own spec: this is about open flame/heat, not brightness. Furnace/Smoker/Blast Furnace/Campfire/Soul
-        //Campfire also need their own LIT property checked at runtime (see HeatSensorBlock.isHotBlock) since a
-        //tag can't express "only when lit".
+        //Cross-mod/vanilla compatibility - membership signals "this is a button" to anything checking the tag
+        //rather than instanceof ButtonBlock (e.g. some pathfinding/AI avoidance checks).
+        tag(BlockTags.BUTTONS).add(BCBlocks.GOLD_BUTTON.get());
+        tag(BlockTags.BUTTONS).add(BCBlocks.IRON_BUTTON.get());
+
+        //Heat Detector's own candidate list while not inverted (see HeatDetectorBlock) - light sources that are
+        //"contained" (lanterns, redstone lamp, glowstone, jack o'lantern, candles, etc.) are deliberately
+        //excluded, matching the source mod's own spec: this is about open flame/heat, not brightness.
+        //Furnace/Smoker/Blast Furnace/Campfire/Soul Campfire also need their own LIT property checked at runtime
+        //(see HeatDetectorBlock.isHotBlock) since a tag can't express "only when lit".
         tag(BCTags.HOT_BLOCK)
                 .add(Blocks.LAVA)
                 .add(Blocks.LAVA_CAULDRON)
@@ -107,6 +112,16 @@ public class BCBlockTagProvider extends BlockTagsProvider {
                 .add(Blocks.SMOKER)
                 .add(Blocks.BLAST_FURNACE)
                 .add(Blocks.MAGMA_BLOCK);
+
+        //Heat Detector's own candidate list while INVERTED - every ice variant and both snow blocks, per the
+        //source mod's own spec ("all ice blocks and snow blocks"). No LIT-style runtime gate needed here.
+        tag(BCTags.COLD_BLOCK)
+                .add(Blocks.ICE)
+                .add(Blocks.PACKED_ICE)
+                .add(Blocks.BLUE_ICE)
+                .add(Blocks.FROSTED_ICE)
+                .add(Blocks.SNOW)
+                .add(Blocks.SNOW_BLOCK);
     }
 
     private static TagKey<Block> blockTag(String path) {
